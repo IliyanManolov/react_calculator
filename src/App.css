@@ -12,6 +12,7 @@ body{
 
 .calculator-grid{
   display:grid;
+  justify-content: center;
   margin-top:30px;
   grid-template-columns: repeat(4, 6rem);
   grid-template-rows: minmax(7rem, auto) repeat(5, 6rem);
@@ -49,4 +50,8 @@ body{
   outline: none;
   background-color: rgba(255, 255, 255, .60);
   border: 1px solid white;
+}
+
+.calculator-grid button:hover{
+  background-color: rgba(255, 255, 255, 0.9);
 }
