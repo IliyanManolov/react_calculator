@@ -1,7 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import { useReducer } from 'react';
 import DigitButton from './DigitButton';
+import OperationButton from './OperationButton'
 
 export const ACTIONS = {
   ADD_DIGIT: 'add-digit',
@@ -13,6 +13,8 @@ export const ACTIONS = {
 function reducer(state, {type, payload}) {
   switch(type){
     case ACTIONS.ADD_DIGIT:
+      if (payload.digit === '0' && state.currentNumber === '0') return state
+      if (payload.digit === '.' && state.currentNumber.includes('.')) return state
       return {
         ...state,
         currentNumber: `${currentNumber || ''}${payload.digit}`
@@ -32,21 +34,21 @@ function App() {
       </div>
       <button className='two-wide'>AC</button>
       <button>DEL</button>
-      <button>÷</button>
-      <button>9</button>
-      <button>8</button>
-      <button>7</button>
-      <button>*</button>
-      <button>6</button>
-      <button>5</button>
-      <button>4</button>
-      <button>+</button>
-      <button>3</button>
-      <button>2</button>
+      <OperationButton operation="÷" dispatch={dispatch}></OperationButton>
+      <DigitButton digit="9" dispatch={dispatch}></DigitButton>
+      <DigitButton digit="8" dispatch={dispatch}></DigitButton>
+      <DigitButton digit="7" dispatch={dispatch}></DigitButton>
+      <OperationButton operation="*" dispatch={dispatch}></OperationButton>
+      <DigitButton digit="6" dispatch={dispatch}></DigitButton>
+      <DigitButton digit="5" dispatch={dispatch}></DigitButton>
+      <DigitButton digit="4" dispatch={dispatch}></DigitButton>
+      <OperationButton operation="+" dispatch={dispatch}></OperationButton>
+      <DigitButton digit="3" dispatch={dispatch}></DigitButton>
+      <DigitButton digit="2" dispatch={dispatch}></DigitButton>
       <DigitButton digit="1" dispatch={dispatch}></DigitButton>
-      <button>-</button>
-      <button>.</button>
-      <button>0</button>
+      <OperationButton operation="-" dispatch={dispatch}></OperationButton>
+      <DigitButton digit="." dispatch={dispatch}></DigitButton>
+      <DigitButton digit="0" dispatch={dispatch}></DigitButton>
       <button className='two-wide'>=</button>
     </div>
   )
