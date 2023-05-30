@@ -13,7 +13,7 @@ export const ACTIONS = {
 
 function reducer(state, {type, payload}) {
   switch(type){
-    case ACTIONS.ADD_DIGIT:
+    case ACTIONS.ADD_DIGIT: 
       if (payload.digit === '0' && state.currentNumber === '0') 
         return state
       if (payload.digit === '.' && state.currentNumber.includes('.'))
@@ -77,12 +77,16 @@ function evaluate({ currentNumber, lastNumber, operation}){
   switch (operation){
     case "+":
       result = last + current
+      break
     case "-":
       result = last - current
+      break
     case "*":
       result = last * current
+      break
     case "÷":
       result = last / current
+      break
   }
 
   return result.toString()
