@@ -60,6 +60,20 @@ function reducer(state, {type, payload}) {
         operation: null,
         currentNumber: evaluate(state)
       }
+    
+    case ACTIONS.DELETE_DIGIT:
+      if (state.currentNumber == null)
+        return state
+      if (state.currentNumber.length === 1)
+        return{
+          ...state,
+          currentNumber: null
+        }
+      
+        return{
+          ...state,
+          currentNumber: state.currentNumber.slice(0, state.currentNumber.length - 1)
+        }
 
     case ACTIONS.CLEAR:
       return {}
@@ -95,7 +109,6 @@ function evaluate({ currentNumber, lastNumber, operation}){
 function App() {
   const [{ currentNumber, lastNumber, operation }, dispatch] = useReducer(reducer, {})
 
-  //dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit: 1}})
   return (
     <div className='calculator-grid'>
       <div className='output-field'>
@@ -103,7 +116,7 @@ function App() {
         <div className='current-number'>{currentNumber}</div>
       </div>
       <button className='two-wide' onClick ={() => dispatch({ type:ACTIONS.CLEAR})}>AC</button>
-      <button>DEL</button>
+      <button onClick ={() => dispatch({ type:ACTIONS.DELETE_DIGIT})}>DEL</button>
       <OperationButton operation="÷" dispatch={dispatch}></OperationButton>
       <DigitButton digit="9" dispatch={dispatch}></DigitButton>
       <DigitButton digit="8" dispatch={dispatch}></DigitButton>
