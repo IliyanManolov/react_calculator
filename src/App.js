@@ -10,20 +10,86 @@ export const ACTIONS = {
   CHOOSE_OPERATION: 'choose-operation',
   EVALUATE: 'evaluate'
 }
+
 function reducer(state, {type, payload}) {
   switch(type){
     case ACTIONS.ADD_DIGIT:
-      if (payload.digit === '0' && state.currentNumber === '0') return state
-      if (payload.digit === '.' && state.currentNumber.includes('.')) return state
+      if (payload.digit === '0' && state.currentNumber === '0') 
+        return state
+      if (payload.digit === '.' && state.currentNumber.includes('.'))
+        return state
+      
       return {
         ...state,
-        currentNumber: `${currentNumber || ''}${payload.digit}`
+        currentNumber: `${state.currentNumber || ''}${payload.digit}`
       }
+    case ACTIONS.CHOOSE_OPERATION:
+      if (state.currentNumber == null && state.lastNumber == null){
+        return state
+      }
+
+      if (state.currentNumber == null){
+        return{
+          ...state,
+          operation: payload.operation
+        }
+      }
+
+      if (state.lastNumber == null) {
+        return {
+          ...state,
+          operation: payload.operation,
+          lastNumber: state.currentNumber,
+          currentNumber: null
+        }
+      }
+
+      return{
+        ...state,
+        lastNumber: evaluate(state),
+        operation: payload.operation,
+        currentNumber: null
+      }
+    
+    case ACTIONS.EVALUATE:
+      if (state.operation == null || state.currentNumber == null || state.lastNumber == null)
+        return state
+      return {
+        ...state,
+        lastNumber: null,
+        operation: null,
+        currentNumber: evaluate(state)
+      }
+
+    case ACTIONS.CLEAR:
+      return {}
   }
 }
 
+function evaluate({ currentNumber, lastNumber, operation}){
+  const last = parseFloat(lastNumber)
+  const current = parseFloat(currentNumber)
+  if (isNaN(last) || isNaN(current))
+    return ""
+  
+  let result = ""
+
+  switch (operation){
+    case "+":
+      result = last + current
+    case "-":
+      result = last - current
+    case "*":
+      result = last * current
+    case "÷":
+      result = last / current
+  }
+
+  return result.toString()
+}
+
 function App() {
-  const [{currentNumber, lastNumber, operation}, dispatch] = useReducer(reducer, {})
+  const [{ currentNumber, lastNumber, operation }, dispatch] = useReducer(reducer, {})
 
   //dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit: 1}})
   return (
@@ -32,7 +98,7 @@ function App() {
         <div className='last-number'>{lastNumber} {operation}</div>
         <div className='current-number'>{currentNumber}</div>
       </div>
-      <button className='two-wide'>AC</button>
+      <button className='two-wide' onClick ={() => dispatch({ type:ACTIONS.CLEAR})}>AC</button>
       <button>DEL</button>
       <OperationButton operation="÷" dispatch={dispatch}></OperationButton>
       <DigitButton digit="9" dispatch={dispatch}></DigitButton>
@@ -49,7 +115,7 @@ function App() {
       <OperationButton operation="-" dispatch={dispatch}></OperationButton>
       <DigitButton digit="." dispatch={dispatch}></DigitButton>
       <DigitButton digit="0" dispatch={dispatch}></DigitButton>
-      <button className='two-wide'>=</button>
+      <button className='two-wide' onClick = {() => dispatch({ type:ACTIONS.EVALUATE})}>=</button>
     </div>
   )
 }
