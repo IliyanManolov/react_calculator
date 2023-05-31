@@ -21,8 +21,9 @@ function reducer(state, {type, payload}) {
       
       return {
         ...state,
-        currentNumber: `${state.currentNumber || ''}${payload.digit}`
+        currentNumber: `${state.currentNumber || ""}${payload.digit}`
       }
+
     case ACTIONS.CHOOSE_OPERATION:
       if (state.currentNumber == null && state.lastNumber == null){
         return state
@@ -118,7 +119,7 @@ function formatNumber(number){
 
   if (decimal == null)
     return FORMATTER.format(integer)
-  return `${FORMATTER.format(integer)}.${decimal}}`
+  return `${FORMATTER.format(integer)}.${decimal}`
 }
 
 function App() {
