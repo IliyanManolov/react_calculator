@@ -106,14 +106,29 @@ function evaluate({ currentNumber, lastNumber, operation}){
   return result.toString()
 }
 
+const FORMATTER = new Intl.NumberFormat("en-us",{
+  maximumFractionDigits: 0,
+})
+
+function formatNumber(number){
+  if (number == null)
+    return
+  
+  const [integer, decimal] = number.split(".")
+
+  if (decimal == null)
+    return FORMATTER.format(integer)
+  return `${FORMATTER.format(integer)}.${decimal}}`
+}
+
 function App() {
   const [{ currentNumber, lastNumber, operation }, dispatch] = useReducer(reducer, {})
 
   return (
     <div className='calculator-grid'>
       <div className='output-field'>
-        <div className='last-number'>{lastNumber} {operation}</div>
-        <div className='current-number'>{currentNumber}</div>
+        <div className='last-number'>{formatNumber(lastNumber)} {operation}</div>
+        <div className='current-number'>{formatNumber(currentNumber)}</div>
       </div>
       <button className='two-wide' onClick ={() => dispatch({ type:ACTIONS.CLEAR})}>AC</button>
       <button onClick ={() => dispatch({ type:ACTIONS.DELETE_DIGIT})}>DEL</button>
