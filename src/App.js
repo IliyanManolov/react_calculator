@@ -16,9 +16,16 @@ function reducer(state, {type, payload}) {
     case ACTIONS.ADD_DIGIT: 
       if (payload.digit === '0' && state.currentNumber === '0') 
         return state
+
+      if (payload.digit === '.' && state.currentNumber == null)
+        return {
+          ...state,
+          currentNumber: `0.`
+        }
+      
       if (payload.digit === '.' && state.currentNumber.includes('.'))
         return state
-      
+        
       return {
         ...state,
         currentNumber: `${state.currentNumber || ""}${payload.digit}`
